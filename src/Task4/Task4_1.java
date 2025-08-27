@@ -1,13 +1,13 @@
-package Task4_1;
+package Task4;
 
 import java.util.Scanner;
 
-public class Main {
+public class Task4_1 {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-        System.out.println("Введите строку");
+        System.out.println("Введите строку:");
         String str = scanner.nextLine();
-        System.out.println("Введите подстроку");
+        System.out.println("Введите подстроку:");
         String str1 = scanner.nextLine();
         boolean err = false;
         if (str.isEmpty()) {
@@ -19,7 +19,6 @@ public class Main {
             err = true;
         }
         if (err) {
-            scanner.close();
             return;
         }
         int count = 0;
