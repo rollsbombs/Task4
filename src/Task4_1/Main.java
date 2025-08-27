@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
         System.out.println("Введите строку");
         String str = scanner.nextLine();
         System.out.println("Введите подстроку");
@@ -47,6 +47,6 @@ public class Main {
                 System.out.println("Подстрока '" + str1 + "' встречается " + count + " раз");
             }
         }
-        scanner.close();
     }
+}
 }
