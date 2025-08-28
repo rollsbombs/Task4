@@ -18,7 +18,7 @@ public class Task4_4 {
                 String date2 = date2Format.format(date);
                 System.out.println(date2);
             } catch (ParseException e) {
-                System.out.println("Ошибка: Неверный формат даты. Пожалуйста, используйте формат 'дд.мм.гггг'");
+                System.out.println("Ошибка: Неверный формат даты. Используйте формат 'дд.мм.гггг'");
             }
         }
     }
