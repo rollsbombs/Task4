@@ -31,19 +31,35 @@ public class Task4_3 {
         return validMonths.contains(mothA);
     }
 
-    private static boolean isDay(String day, String month) {
-        if (!isNumber(day) || !isNumber(month))
+    private static boolean isDay(String day, String month, String year) {
+        if (!isNumber(day) || !isNumber(month) || !isNumber(year))
             return false;
         String dayZ = addZero(day);
         String monthZ = addZero(month);
-        String month31 = "01 03 05 05 07 08 10 12";
+        int DayInt = Integer.parseInt(day);
+        int yearInt = Integer.parseInt(year);
+        String month31 = "01 03 05 07 08 10 12";
         if (month31.contains(monthZ.concat(" "))) {
             String validDay31 = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31";
             return validDay31.contains(dayZ.concat(" "));
         }
+        String month30 = "04 06 09 11";
+        if (month30.contains(monthZ.concat(" "))) {
+            String validDay30 = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30";
+            return validDay30.contains(dayZ.concat(" "));
+        }
+        if (monthZ.equals("02")) {
+            boolean visYear = (yearInt % 4 == 0) && (yearInt % 100 !=0) || (yearInt % 400 == 0);
+            if (visYear) {
+                String validDayFebVis = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29";
+                return validDayFebVis.contains(dayZ.concat(" "));
+            } else {
+                String validDayFeb = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28";
+                return validDayFeb.contains(dayZ.concat(" "));
+            }
+        }
         return false;
-    }
-
+        }
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Введите строку в формате 'дд.мм.гггг'");
@@ -72,7 +88,7 @@ public class Task4_3 {
                 System.err.println("Ошибка: месяц должен быть от 1 до 12");
                 return;
             }
-            if (!isDay(day, month)) {
+            if (!isDay(day, month, year)) {
                 System.err.println("Ошибка: неверное количество дней в месяце");
                 return;
             }
