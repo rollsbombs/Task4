@@ -3,63 +3,34 @@ package Task4;
 import java.util.Scanner;
 
 public class Task4_3 {
-    private static String addZero(String number) {
-        if (number.length() == 1) {
-            return "0".concat(number);
-        }
-        return number;
-    }
 
     private static boolean isNumber(String str) {
         if (str == null || str.isEmpty())
             return false;
-        String numbers = "0123456789";
         for (int i = 0; i < str.length(); i++) {
-            String symbol = str.substring(i, i + 1);
-            if (!numbers.contains(symbol)) {
+            char c  = str.charAt(i);
+            if (c<'0' || c>'9') {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean isMonth(String month) {
-        if (!isNumber(month))
+    private static boolean isTrueDate(int day, int month, int year) {
+        if (month < 1 || month > 12)
             return false;
-        String validMonths = "01 02 03 04 05 06 07 08 09 10 11 12";
-        String mothA = addZero(month).concat(" ");
-        return validMonths.contains(mothA);
-    }
-
-    private static boolean isDay(String day, String month, String year) {
-        if (!isNumber(day) || !isNumber(month) || !isNumber(year))
-            return false;
-        String dayZ = addZero(day);
-        String monthZ = addZero(month);
-        int DayInt = Integer.parseInt(day);
-        int yearInt = Integer.parseInt(year);
-        String month31 = "01 03 05 07 08 10 12";
-        if (month31.contains(monthZ.concat(" "))) {
-            String validDay31 = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31";
-            return validDay31.contains(dayZ.concat(" "));
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+            return day >= 1 && day <= 31;
         }
-        String month30 = "04 06 09 11";
-        if (month30.contains(monthZ.concat(" "))) {
-            String validDay30 = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30";
-            return validDay30.contains(dayZ.concat(" "));
+        if (month == 4 || month == 6 || month == 9 || month == 11) {
+            return day <= 30;
         }
-        if (monthZ.equals("02")) {
-            boolean visYear = (yearInt % 4 == 0) && (yearInt % 100 !=0) || (yearInt % 400 == 0);
-            if (visYear) {
-                String validDayFebVis = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29";
-                return validDayFebVis.contains(dayZ.concat(" "));
-            } else {
-                String validDayFeb = "01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28";
-                return validDayFeb.contains(dayZ.concat(" "));
-            }
+        if (month == 2) {
+            boolean isVisYear = (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
+            return isVisYear ? day <= 29 : day <= 28;
         }
         return false;
-        }
+    }
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Введите строку в формате 'дд.мм.гггг'");
@@ -73,26 +44,33 @@ public class Task4_3 {
                 System.err.println("Ошибка: неверный формат даты");
                 return;
             }
-            String day = addZero(parts[0]);
-            String month = addZero(parts[1]);
-            String year = parts[2];
-            if (year.length() != 4) {
+            String dayStr = parts[0];
+            String monthStr = parts[1];
+            String yearStr = parts[2];
+            if (!isNumber(dayStr) || !isNumber(monthStr) || !isNumber(yearStr)) {
+                System.err.println("Ошибка: все части даты должны быть числами");
+                return;
+            }
+            if (yearStr.length() != 4) {
                 System.err.println("Ошибка: год должен содержать 4 цифры");
                 return;
             }
-            if (!(isNumber(day) && isNumber(month) && isNumber(year))) {
-                System.err.println("Ошибка: дата должна содержать только цифры");
+            int day, month, year;
+            try {
+                day = Integer.parseInt(dayStr);
+                month = Integer.parseInt(monthStr);
+                year = Integer.parseInt(yearStr);
+            } catch (NumberFormatException e) {
+                System.err.println("Ошибка: неверный числовой формат");
                 return;
             }
-            if (!isMonth(month)) {
-                System.err.println("Ошибка: месяц должен быть от 1 до 12");
+            if (!isTrueDate(day, month, year)) {
+                System.err.println("Ошибка: неверная дата");
                 return;
             }
-            if (!isDay(day, month, year)) {
-                System.err.println("Ошибка: неверное количество дней в месяце");
-                return;
-            }
-            String date2 = year.concat("-").concat(month).concat("-").concat(day);
+            String formatDay = String.format("%02d", day);
+            String formatMonth = String.format("%02d", month);
+            String date2 = year + ("-") + formatMonth + ("-") + formatDay;
             System.out.println(date2);
         }
     }
